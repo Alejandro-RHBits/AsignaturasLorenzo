@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary-header: #3484AD;
+    --color-primary-main: #3C3295;
+
+    /*BreakPoints*/
+    --breakpoint-xs: 300px;
+    --breakpoint-sm: 600px;
+}
