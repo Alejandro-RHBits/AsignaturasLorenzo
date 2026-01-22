@@ -8,15 +8,16 @@
     <link rel="stylesheet" href="./assets/output.css">
 </head>
 
-<body class="min-h-screen bg-slate-500 text-white">
+<body class="max-w-xl mx-auto min-h-dvh bg-gradient-to-b from-gray-800 via-violet-800 to-violet-950 ">
 
-    <div class="flex flex-col h-screen">
+    <div class="flex flex-col min-h-screen">
 
-        <header class="flex justify-center bg-primary-header">
+        <header class="flex justify-center">
 
-            <div class="flex flex-col justify-center items-center">
+            <div class="flex flex-col justify-center items-center gap-2">
 
-                <img src="./assets/fondo.jpg" alt="tom" class=" object-cover mask-radial-from-40% rounded-xl -mb-2">
+                <img src="./assets/fondo.jpg" alt="tom"
+                    class="w-full object-cover rounded-xl -mb-2 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent),linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [mask-composite:intersect] [-webkit-mask-composite:source-in]">
 
                 <span
                     class="text-cyan-500 text-xl font-mono px-3 py-1 border rounded-full shadow-sm bg-black/80 cursor-pointer z-10">
@@ -26,38 +27,39 @@
                 <h1 class="flex items-center text-2xl sm:text-4xl font-bold text-white text-center">
                     Alejandro Ríos H.
                 </h1>
-
-                <p class="flex items-center">
+                <p class="flex items-center font-bold text-white">
                     Puedes encontrarme en:
                 </p>
 
                 <section class="flex justify-center gap-4">
 
                     <a class="bg-gradient-to-br from-gray-900 to-gray-700 rounded-full flex p-2 w-12 h-12 items-center justify-center hover:bg-gray-700"
-                        href="#" target="_blank" aria-label="Github" title="Abrir Github">
+                        href="https://github.com/Alejandro-RHBits" target="_blank" aria-label="Github"
+                        title="Abrir Github">
                         <svg class="w-10 h-10">
                             <use href="./assets/sprite.svg#github"></use>
                         </svg>
                     </a>
 
                     <a class="bg-gradient-to-br from-gray-400 to-gray-100 rounded-full flex p-2 w-12 h-12 items-center justify-center hover:bg-gray-300"
-                        href="#" target="_blank" aria-label="Twitter" title="Abrir Twitter">
+                        href="https://www.linkedin.com/in/alejandro-david-r%C3%ADos-holgu%C3%ADn-b3500b364/"
+                        target="_blank" aria-label="Linkedin" title="Abrir Linkedin">
                         <svg class="w-10 h-10">
                             <use href="./assets/sprite.svg#linkedin"></use>
                         </svg>
                     </a>
 
                     <a class="bg-gradient-to-br from-gray-900 to-gray-700 rounded-2xl flex p-2 w-12 h-12 items-center justify-center hover:bg-gray-700"
-                        href="#" target="_blank" aria-label="Youtube" title="Abrir Youtube">
+                        href="https://www.instagram.com/alejow_rh/" target="_blank" aria-label="Instagram"
+                        title="Abrir Instagram">
                         <svg class="w-10 h-10">
-                            <use href="./assets/sprite.svg#youtube"></use>
+                            <use href="./assets/sprite.svg#instagram"></use>
                         </svg>
                     </a>
                 </section>
-                <br>
             </div>
         </header>
-        <main class="pt-4 px-4 pb-16 bg-sky-300">
+        <main class="pt-4 px-4 pb-16">
             <div class="grid grid-cols-3 grid-rows-2 gap-2 w-full">
                 <a href="https://cursoreact.dev"
                     class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-cyan-900 via-cyan-700 to-cyan-500 border border-cyan-900 flex flex-col items-start hover:scale-105 hover:contrast-125 transition group col-span-2 p-7 min-h-[180px]">
@@ -68,12 +70,10 @@
                         width="100" height="100">
                         <use xlink:href="./assets/sprite.svg#react" />
                     </svg>
-
-                    <span class="absolute top-2 left-4 text-xs border rounded-xl px-1 py-0.5">Curso de +14 clases</span>
                 </a>
 
                 <a href="https://midu.link/html"
-                    class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-html via-orange-300 to-white border border-html flex flex-col items-start hover:scale-105 hover:contrast-125 transition group col-span-1 p-7 min-h-[180px]">
+                    class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-html via-orange-300 to-white flex flex-col items-start hover:scale-105 hover:contrast-125 transition group col-span-1 p-7 min-h-[180px]">
                     <span
                         class="absolute bottom-2 left-4 font-bold text-2xl group-hover:-translate-y-1 transition-transform">HTML</span>
 
@@ -81,8 +81,6 @@
                         width="100" height="100">
                         <use xlink:href="./assets/sprite.svg#html" />
                     </svg>
-
-                    <span class="absolute top-2 left-4 text-xs border rounded-xl px-1 py-0.5">Para principiantes</span>
                 </a>
 
                 <a href="https://midu.link/html"
@@ -94,8 +92,6 @@
                         width="100" height="100">
                         <use xlink:href="./assets/sprite.svg#css" />
                     </svg>
-
-                    <span class="absolute top-2 left-4 text-xs border rounded-xl px-1 py-0.5">Para principiantes</span>
                 </a>
 
                 <a href="https://cursoreact.dev"
@@ -107,13 +103,11 @@
                         width="100" height="100">
                         <use xlink:href="./assets/sprite.svg#node" />
                     </svg>
-
-                    <span class="absolute top-2 left-4 text-xs border rounded-xl px-1 py-0.5">Curso de +14 clases</span>
                 </a>
             </div>
         </main>
-        <footer class="flex h-10 justify-center bg-slate-700">
-            Desarrollado por @Alejandro
+        <footer class="flex h-10 justify-center text-white">
+            Desarrollado por @AlejandroRios
         </footer>
     </div>
 </body>
