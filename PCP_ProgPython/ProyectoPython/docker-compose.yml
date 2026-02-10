@@ -1,0 +1,26 @@
+    services:
+        mongo:
+            image: mongo
+            container_name: mongoDB
+            restart: always
+            #Agregamos el puerto para poder conectar python con MongoDB
+            ports:
+                - 27017:27017
+            environment:
+                MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT}
+                MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+            volumes:
+                - mongoData:/data/db
+        mongo-express:
+            image: mongo-express
+            container_name: mongoGUI
+            restart: always
+            ports:
+                - 8081:8081
+            environment:
+                ME_CONFIG_MONGODB_URL: ${MONGO_URI_IN}
+                ME_CONFIG_BASICAUTH_ENABLED: ${MONGOEX_AUTH}
+                ME_CONFIG_BASICAUTH_USERNAME: ${MONGOEX_USER}
+                ME_CONFIG_BASICAUTH_PASSWORD: ${MONGOEX_PASSWORD}
+    volumes:
+        mongoData:
