@@ -14,100 +14,127 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, Email
 
+#Carga variables de entorno
 load_dotenv()
 
 #Creación de una instancia de la clase Flask
 app = Flask(__name__)
+app.secret_key = getenv('SECRET_KEY', 'clave')
 
+#Conexión con la BDD
 client = MongoClient(getenv('MONGO_URI'))
+db = client['directorio_personas']
+coleccion = db['personas']
 
-if "escuela" not in client.list_database_names():
-    db = client['escuela']
-    tabla = db['estudiantes']
-    tabla.insert_one({})
-else:
-    db = client['escuela']
-    tabla = db['estudiantes']
+#Definimos el formulario para las personas que se quieran registrar
 
-@app.route('/', methods=['GET'])
+class FormularioAgregarPersonas(FlaskForm):
+    nombre = StringField('Nombre', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    edad = IntegerField('Edad', validators=[DataRequired()])
+    submit = SubmitField('Guardar')
 
-def home():
-    return(client.list_database_names())
+#Definición de los endpoints usando decoradores
 
-@app.route('/lista', methods=['GET'])
-def lista():
-    return (client.list_database_names())
+# 1.Página de inicio con portada
+@app.route('/')
+def inicio():
+    return render_template('inicio.html')
 
-@app.route('/tabla', methods=['GET'])
-def tabla():
-    documentos = client.escuela.estudiantes.find()
-    listado=[]
-    for doc in documentos:
-        doc['_id'] = str(doc['_id']) 
-        listado.append(doc)
-    
-    # IMPORTANTE: El return debe ir FUERA del for, alineado con el 'for'
-    return jsonify(listado)
+# 2.Página con el listado de personas
+@app.route('/listado')
+def listado():
+    listado = coleccion.find()
+    return render_template('listado.html', listado=listado)
 
-if __name__ == '__main__':
-    app.run()
+# 3.Página para Agregar personas
+@app.route('/agregar', methods=['GET', 'POST'])
+def agregar():
+    form = FormularioAgregarPersonas()
 
-# --------------------------------------------------MI PROYECTO-----------------------------------------------------------
-
-# #Conexión con la BDD
-# client = MongoClient(getenv('MONGO_URI'))
-# db = client['nombre_bdd']
-# coleccion = db['nombre_coleccion']
-
-# #Definimos el formulario para las personas que se quieran registrar
-
-# class FormularioAgregarPersonas(FlaskForm):
-#     nombre = StringField('Nombre', validators=[DataRequired()])
-#     email = StringField('Email', validators=[DataRequired(), Email()])
-#     edad = IntegerField('Edad', validators=[DataRequired()])
-#     submit = SubmitField('Guardar')
-
-# #Definición de los endpoints usando decoradores
-
-# # 1.Página de inicio con portada
-# @app.route('/')
-# def inicio():
-#     return render_template('inicio.html')
-
-# # 2.Página con el listado de personas
-# @app.route('/listado')
-# def listado():
-#     listado = coleccion.find()
-#     return render_template('listado.html', listado=listado)
-
-# # 3.Página para Agregar personas
-# @app.route('/agregar', methods=['GET', 'POST'])
-# def agregar():
-#     form = FormularioAgregarPersonas()
-
-#     if form.validate_on_submit():
+    if form.validate_on_submit():
         
-#         nueva_persona = {
-#             'nombre': form.nombre.data,
-#             'email': form.email.data,
-#             'edad': form.edad.data
-#         }
+        nueva_persona = {
+            'nombre': form.nombre.data,
+            'email': form.email.data,
+            'edad': form.edad.data
+        }
 
-#         coleccion.insert_one(nueva_persona)
-#         flash('¡Persona agregada exitosamente!', 'success')
-#         return redirect(url_for('inicio'))
+        coleccion.insert_one(nueva_persona)
+        flash('¡Persona agregada exitosamente!', 'success')
+        return redirect(url_for('listado'))
     
-#     return render_template('crear_usuario.html', form=form, titulo="Agregar")
+    return render_template('crear_usuario.html', form=form, titulo="Agregar Persona")
 
-# # 4.Página Editar Usuarios
-# @app.route('/editar/<id_usuario>', methods=['GET', 'POST'])
-# def editar(id_usuario):
-#     usuario_db = coleccion.find_one({'id': ObjectId(id_usuario)})
+# 4.Página Editar Usuarios
+@app.route('/editar/<id_usuario>', methods=['GET', 'POST'])
+def editar(id_usuario):
+    usuario_db = coleccion.find_one({'_id': ObjectId(id_usuario)})
     
+    form = FormularioAgregarPersonas(data=usuario_db)
 
-# #Definición del bloque IfName, para controlar la ejecución del módulo principal.
+    if form.validate_on_submit():
+        coleccion.update_one(
+            {'_id': ObjectId(id_usuario)},
+            {'$set':{
+                'nombre': form.nombre.data,
+                'email': form.email.data,
+                'edad': form.edad.data
+            }}
+        )
+        flash('Persona actualizada correctamente', 'info')
+        return redirect(url_for('listado'))
+    
+    return render_template('crear_usuario.html', form=form, titulo="Editar Persona")
+    
+#Eliminar Usuarios
+@app.route('/eliminar/<id_usuario>')
+def eliminar(id_usuario):
+    coleccion.delete_one({'_id': ObjectId(id_usuario)})
+    flash('Persona eliminada exitosamente', 'danger')
+    return redirect(url_for('listado'))
+
+
+#Definición del bloque IfName, para controlar la ejecución del módulo principal.
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+# -----------------------------------------------Prototipo hecho en Clase------------------------------------------------
+# load_dotenv()
+
+# #Creación de una instancia de la clase Flask
+# app = Flask(__name__)
+
+# client = MongoClient(getenv('MONGO_URI'))
+
+# if "escuela" not in client.list_database_names():
+#     db = client['escuela']
+#     tabla = db['estudiantes']
+#     tabla.insert_one({})
+# else:
+#     db = client['escuela']
+#     tabla = db['estudiantes']
+
+# @app.route('/', methods=['GET'])
+
+# def home():
+#     return(client.list_database_names())
+
+# @app.route('/lista', methods=['GET'])
+# def lista():
+#     return (client.list_database_names())
+
+# @app.route('/tabla', methods=['GET'])
+# def tabla():
+#     documentos = client.escuela.estudiantes.find()
+#     listado=[]
+#     for doc in documentos:
+#         doc['_id'] = str(doc['_id']) 
+#         listado.append(doc)
+    
+#     # IMPORTANTE: El return debe ir FUERA del for, alineado con el 'for'
+#     return jsonify(listado)
+
 # if __name__ == '__main__':
-#     app.run(debug=True)
-
-
-
+#     app.run()
